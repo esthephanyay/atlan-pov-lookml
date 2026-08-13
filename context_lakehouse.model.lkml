@@ -62,6 +62,11 @@ explore: context_tracks {
   }
 }
 
+explore: context_table_history {
+  label: "Governance Trend"
+  description: "Daily snapshots of table governance state. Use this to show whether coverage is improving or eroding, which a point-in-time view cannot answer."
+}
+
 explore: context_users {
   label: "Users"
   description: "Atlan user directory with role, licence type and personas."

@@ -205,6 +205,69 @@
     width: 12
     height: 7
 
+  - title: "Documentation Coverage Over Time"
+    name: trend_documented
+    model: context_lakehouse
+    explore: context_table_history
+    type: looker_line
+    fields: [context_table_history.snapshot_week, context_table_history.pct_documented, context_table_history.pct_verified]
+    sorts: [context_table_history.snapshot_week]
+    limit: 500
+    note_state: expanded
+    note_display: below
+    note_text: "Coverage held near 93% from March to June, then dropped to 70.5% in the first week of July when 1,003 new tables landed at once. It has not recovered since. A point-in-time number cannot show this."
+    row: 31
+    col: 0
+    width: 16
+    height: 8
+
+  - title: "Governance Debt"
+    name: trend_debt
+    model: context_lakehouse
+    explore: context_table_history
+    type: looker_area
+    fields: [context_table_history.snapshot_week, context_table_history.documented_count, context_table_history.undocumented_count]
+    sorts: [context_table_history.snapshot_week]
+    limit: 500
+    stacking: normal
+    note_state: expanded
+    note_display: below
+    note_text: "Undocumented tables in absolute terms: steady around 250 through June, then 1,249 from July onward. Data arriving faster than stewardship can keep up."
+    row: 31
+    col: 16
+    width: 8
+    height: 8
+
+  - title: "Verified Tables Trend"
+    name: trend_verified
+    model: context_lakehouse
+    explore: context_table_history
+    type: looker_line
+    fields: [context_table_history.snapshot_week, context_table_history.verified_count]
+    sorts: [context_table_history.snapshot_week]
+    limit: 500
+    note_state: expanded
+    note_display: below
+    note_text: "Steady stewardship progress: 190 verified in March, 218 by August. Certification is climbing, just far slower than new data arrives."
+    row: 39
+    col: 0
+    width: 12
+    height: 7
+
+  - title: "Latest Snapshot"
+    name: trend_freshness
+    model: context_lakehouse
+    explore: context_table_history
+    type: single_value
+    fields: [context_table_history.latest_snapshot]
+    note_state: expanded
+    note_display: below
+    note_text: "Freshness of the history feed. Check this before presenting the trend as live."
+    row: 39
+    col: 12
+    width: 12
+    height: 7
+
   - title: "High Traffic, Low Governance"
     name: risk_assets
     model: context_lakehouse
