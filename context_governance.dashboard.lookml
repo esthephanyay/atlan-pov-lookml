@@ -210,8 +210,8 @@
     model: context_lakehouse
     explore: context_table_history
     type: looker_line
-    fields: [context_table_history.snapshot_week, context_table_history.pct_documented, context_table_history.pct_verified]
-    sorts: [context_table_history.snapshot_week]
+    fields: [context_table_history.snapshot_date, context_table_history.pct_documented, context_table_history.pct_verified]
+    sorts: [context_table_history.snapshot_date]
     limit: 500
     note_state: expanded
     note_display: below
@@ -226,8 +226,8 @@
     model: context_lakehouse
     explore: context_table_history
     type: looker_area
-    fields: [context_table_history.snapshot_week, context_table_history.documented_count, context_table_history.undocumented_count]
-    sorts: [context_table_history.snapshot_week]
+    fields: [context_table_history.snapshot_date, context_table_history.documented_count, context_table_history.undocumented_count]
+    sorts: [context_table_history.snapshot_date]
     limit: 500
     stacking: normal
     note_state: expanded
@@ -243,8 +243,8 @@
     model: context_lakehouse
     explore: context_table_history
     type: looker_line
-    fields: [context_table_history.snapshot_week, context_table_history.verified_count]
-    sorts: [context_table_history.snapshot_week]
+    fields: [context_table_history.snapshot_date, context_table_history.verified_count]
+    sorts: [context_table_history.snapshot_date]
     limit: 500
     note_state: expanded
     note_display: below
