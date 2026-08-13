@@ -195,6 +195,7 @@
     fields: [context_assets.asset_name, context_assets.asset_type, context_assets.connector_name, context_assets.certificate_status, context_pages.count]
     filters:
       context_pages.asset_guid: "-NULL"
+      context_assets.asset_name: "-NULL"
     sorts: [context_pages.count desc]
     limit: 15
     listen:
@@ -212,6 +213,7 @@
     fields: [context_assets.asset_name, context_assets.asset_type, context_assets.connector_name, context_assets.governance_score, context_pages.count]
     filters:
       context_pages.asset_guid: "-NULL"
+      context_assets.asset_name: "-NULL"
       context_assets.governance_score: "<=1"
     sorts: [context_pages.count desc]
     limit: 15
@@ -233,6 +235,7 @@
     fields: [context_pages.viewed_date, context_pages.section, context_assets.asset_name, context_assets.certificate_status]
     filters:
       context_users.is_current_viewer: "Yes"
+      context_assets.asset_name: "-NULL"
     sorts: [context_pages.viewed_date desc]
     limit: 25
     note_state: expanded
