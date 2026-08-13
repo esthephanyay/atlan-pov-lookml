@@ -118,10 +118,18 @@ view: context_pages {
     drill_fields: [context_users.name, count]
   }
 
-  measure: unique_sessions {
-    label: "Sessions"
+  # The amplitude session and session_uuid columns are empty in this tenant,
+  # so anonymous_id is the only reliable device identifier available.
+  measure: unique_devices {
+    label: "Distinct Devices"
     type: count_distinct
-    sql: ${TABLE}.context_actions_amplitude_session_id ;;
+    sql: ${TABLE}.anonymous_id ;;
+  }
+
+  measure: active_days {
+    label: "Active Days"
+    type: count_distinct
+    sql: ${TABLE}.timestamp::date ;;
   }
 
   measure: unique_assets_viewed {
