@@ -81,10 +81,13 @@ view: context_assets {
     sql: coalesce(array_size(${TABLE}.term_guids), 0) ;;
   }
 
+  # Tags come from the tagrelationship join, not the asset_tags array on this
+  # table: that array is populated for only 10 assets tenant-wide, while
+  # tagrelationship carries 5,331 live assignments.
   dimension: tag_count {
     label: "Tag Count"
     type: number
-    sql: coalesce(array_size(${TABLE}.asset_tags), 0) ;;
+    sql: coalesce(${context_asset_tags.tag_count}, 0) ;;
   }
 
   dimension: has_description {
@@ -155,11 +158,21 @@ view: context_assets {
 
   # ---------- Popularity ----------
 
+  # Atlan writes FLT_MIN (~1.18e-38) instead of null when an asset has never
+  # been queried. Left raw it renders as 0.00 but breaks any "= 0" filter,
+  # so it is normalised to a true zero here.
   dimension: popularity_score {
     label: "Popularity Score"
     type: number
     value_format_name: decimal_2
-    sql: ${TABLE}.popularity_score ;;
+    sql: case when ${TABLE}.popularity_score < 1e-30 then 0
+              else ${TABLE}.popularity_score end ;;
+  }
+
+  dimension: has_popularity {
+    label: "Has Been Queried"
+    type: yesno
+    sql: ${TABLE}.popularity_score >= 1e-30 ;;
   }
 
   dimension: source_read_count {
@@ -246,6 +259,41 @@ view: context_assets {
     drill_fields: [asset_detail*]
   }
 
+  measure: tagged_count {
+    label: "Tagged Assets"
+    type: count
+    filters: [has_tags: "yes"]
+    drill_fields: [asset_detail*]
+  }
+
+  measure: untagged_count {
+    label: "Untagged Assets"
+    type: count
+    filters: [has_tags: "no"]
+    drill_fields: [asset_detail*]
+  }
+
+  measure: no_description_count {
+    label: "Assets Without a Description"
+    type: count
+    filters: [has_description: "no"]
+    drill_fields: [asset_detail*]
+  }
+
+  measure: pct_untagged {
+    label: "% Without Tags"
+    type: number
+    value_format_name: percent_1
+    sql: 1.0 * ${untagged_count} / nullif(${count}, 0) ;;
+  }
+
+  measure: never_queried_count {
+    label: "Never Queried"
+    type: count
+    filters: [has_popularity: "no"]
+    drill_fields: [asset_detail*]
+  }
+
   measure: pct_verified {
     label: "% Verified"
     type: number
@@ -279,6 +327,13 @@ view: context_assets {
     type: number
     value_format_name: percent_1
     sql: 1.0 * ${with_lineage_count} / nullif(${count}, 0) ;;
+  }
+
+  measure: avg_popularity {
+    label: "Avg Popularity"
+    type: average
+    value_format_name: decimal_2
+    sql: ${popularity_score} ;;
   }
 
   measure: avg_governance_score {

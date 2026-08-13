@@ -8,8 +8,20 @@ label: "Atlan Context Lakehouse"
 # Governance coverage across every asset Atlan knows about.
 explore: context_assets {
   label: "Governance Coverage"
-  description: "Every catalogued asset with its certification, ownership, documentation, glossary and lineage state. Start here for governance KPI reporting."
+  description: "Every catalogued asset with its certification, ownership, documentation, glossary and lineage state, plus storage volume and tag assignments. Start here for governance KPI reporting."
   sql_always_where: ${context_assets.status} = 'ACTIVE' ;;
+
+  join: context_asset_tags {
+    type: left_outer
+    relationship: one_to_one
+    sql_on: ${context_assets.guid} = ${context_asset_tags.entityguid} ;;
+  }
+
+  join: context_relational {
+    type: left_outer
+    relationship: one_to_one
+    sql_on: ${context_assets.guid} = ${context_relational.guid} ;;
+  }
 }
 
 # Who is actually using the catalogue, and on which assets.
@@ -27,6 +39,14 @@ explore: context_pages {
     type: left_outer
     relationship: many_to_one
     sql_on: ${context_pages.asset_guid} = ${context_assets.guid} ;;
+  }
+
+  # context_assets.tag_count resolves against this view, so it has to travel
+  # with it into every explore that joins context_assets.
+  join: context_asset_tags {
+    type: left_outer
+    relationship: one_to_one
+    sql_on: ${context_assets.guid} = ${context_asset_tags.entityguid} ;;
   }
 }
 
