@@ -69,12 +69,12 @@
     width: 4
     height: 3
 
-  - title: "Total Size (GB)"
-    name: mdlh_total_gb
+  - title: "% Documented"
+    name: mdlh_pct_documented
     model: context_lakehouse
     explore: context_assets
     type: single_value
-    fields: [context_relational.total_size_gb]
+    fields: [context_assets.pct_documented]
     listen:
       asset_type: context_assets.asset_type
       source_system: context_assets.connector_name
@@ -202,7 +202,7 @@
       asset_type: context_assets.asset_type
       source_system: context_assets.connector_name
       database: context_relational.database_name
-    row: 10
+    row: 18
     col: 0
     width: 12
     height: 8
@@ -224,26 +224,10 @@
       asset_type: context_assets.asset_type
       source_system: context_assets.connector_name
       database: context_relational.database_name
-    row: 10
+    row: 18
     col: 12
     width: 12
     height: 8
-
-  - title: "Storage by Size Band"
-    name: mdlh_size_band
-    model: context_lakehouse
-    explore: context_assets
-    type: looker_column
-    fields: [context_relational.size_band, context_assets.count, context_relational.total_size_gb]
-    sorts: [context_relational.size_band]
-    listen:
-      asset_type: context_assets.asset_type
-      source_system: context_assets.connector_name
-      database: context_relational.database_name
-    row: 18
-    col: 0
-    width: 8
-    height: 7
 
   - title: "Update Trends by User"
     name: mdlh_update_trends
@@ -259,9 +243,9 @@
       asset_type: context_assets.asset_type
       source_system: context_assets.connector_name
       database: context_relational.database_name
-    row: 18
-    col: 8
-    width: 8
+    row: 10
+    col: 0
+    width: 12
     height: 7
 
   - title: "Glossary Coverage"
@@ -273,9 +257,9 @@
     filters:
       context_assets.asset_type: "AtlasGlossary,AtlasGlossaryTerm,AtlasGlossaryCategory"
     sorts: [context_assets.count desc]
-    row: 18
-    col: 16
-    width: 8
+    row: 10
+    col: 12
+    width: 12
     height: 7
 
   # ---------- Remediation backlog ----------

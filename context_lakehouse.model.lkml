@@ -62,6 +62,22 @@ explore: context_tracks {
   }
 }
 
+# Genuine row level security, as opposed to the cosmetic is_current_viewer
+# filter on the dashboard tile. Looker injects the access_filter into every
+# query against this explore, so a user cannot see another user's rows even by
+# editing the filters or building their own Look from scratch. This is the one
+# to open when the question is "can a user only see their own data".
+explore: context_my_data {
+  extends: [context_pages]
+  label: "My Data (row level secured)"
+  description: "Same usage data as Adoption and Usage, restricted to the signed-in user by an access filter that cannot be removed from the UI."
+
+  access_filter: {
+    field: context_users.email
+    user_attribute: email
+  }
+}
+
 explore: context_table_history {
   label: "Governance Trend"
   description: "Daily snapshots of table governance state. Use this to show whether coverage is improving or eroding, which a point-in-time view cannot answer."
