@@ -68,9 +68,27 @@ explore: context_tracks {
 # editing the filters or building their own Look from scratch. This is the one
 # to open when the question is "can a user only see their own data".
 explore: context_my_data {
-  extends: [context_pages]
+  view_name: context_pages
   label: "My Data (row level secured)"
   description: "Same usage data as Adoption and Usage, restricted to the signed-in user by an access filter that cannot be removed from the UI."
+
+  join: context_users {
+    type: inner
+    relationship: many_to_one
+    sql_on: ${context_pages.user_id} = ${context_users.id} ;;
+  }
+
+  join: context_assets {
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${context_pages.asset_guid} = ${context_assets.guid} ;;
+  }
+
+  join: context_asset_tags {
+    type: left_outer
+    relationship: one_to_one
+    sql_on: ${context_assets.guid} = ${context_asset_tags.entityguid} ;;
+  }
 
   access_filter: {
     field: context_users.email
